@@ -1,61 +1,17 @@
-import { AxiosError } from 'axios'
 import { useState, useEffect, PropsWithChildren, useRef } from 'react'
 
-import { getTrialsRequest, trialDTO } from '../../apis/trial'
-import {
-  DEBOUNCE_DELAY_MS,
-  EXPIRE_TIME,
-  SearchContext,
-  useSearchContext,
-} from '../../contexts/SearchContext'
+import { DEBOUNCE_DELAY_MS, SearchContext, useSearchContext } from '../../contexts/SearchContext'
 import useDebounce from '../../hooks/useDebounce'
+import useSuggestion from '../../hooks/useSuggestion'
 
 import * as S from './SearchProvider.styled'
 
-interface SuggestionCache {
-  value: trialDTO[]
-  expireTime: number
-}
-
 function SearchProvider({ children }: PropsWithChildren) {
   const [query, setQuery] = useState('')
-  const debouncedQuery = useDebounce(query, DEBOUNCE_DELAY_MS)
-
-  const [suggestions, setSuggestions] = useState<trialDTO[]>([])
-  const [cache, setCache] = useState<Record<string, SuggestionCache>>({})
   const [selectedIdx, setSelectedIdx] = useState(-1)
 
-  useEffect(() => {
-    const NOW = Date.now()
-
-    if (!debouncedQuery) {
-      setSuggestions([])
-      setSelectedIdx(-1)
-      return
-    }
-
-    if (cache[debouncedQuery] && cache[debouncedQuery].expireTime > NOW) {
-      setSuggestions(cache[debouncedQuery].value)
-      setSelectedIdx(-1)
-      return
-    }
-
-    getTrialsRequest(debouncedQuery)
-      .then((data) => {
-        setSuggestions(data)
-        setCache((prev) => ({
-          ...prev,
-          [debouncedQuery]: {
-            value: data,
-            expireTime: NOW + EXPIRE_TIME,
-          },
-        }))
-        setSelectedIdx(-1)
-      })
-      .catch((e: AxiosError) => {
-        alert(e.message)
-      })
-  }, [debouncedQuery])
+  const debouncedQuery = useDebounce(query, DEBOUNCE_DELAY_MS)
+  const suggestions = useSuggestion(debouncedQuery, setSelectedIdx)
 
   return (
     <SearchContext.Provider value={{ query, setQuery, suggestions, selectedIdx, setSelectedIdx }}>
@@ -93,16 +49,12 @@ function SearchBox() {
 }
 
 function SearchSuggestion() {
-  const { query, suggestions, selectedIdx } = useSearchContext()
+  const { suggestions, selectedIdx } = useSearchContext()
   const selectedElement = useRef<HTMLLIElement>(null)
 
   useEffect(() => {
     selectedElement.current?.scrollIntoView({ block: 'center' })
   }, [selectedIdx])
-
-  if (query === '') {
-    return <div></div>
-  }
 
   if (suggestions.length === 0) {
     return (
