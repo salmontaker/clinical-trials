@@ -35,7 +35,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-uses-react': 'off',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': 'warn',
     'react/jsx-uses-vars': 'error', // var로 JSX할당하면 에러
     'react/button-has-type': 'error', //button에 타입지정안하면 에러
     'react/jsx-sort-props': [
@@ -58,7 +58,7 @@ module.exports = {
     'no-multiple-empty-lines': 'error',
     'no-console': ['error', { allow: ['warn', 'error', 'info'] }], // console.log() 금지
     'import/order': [
-      'error',
+      'warn',
       {
         groups: ['builtin', 'external', 'internal', ['parent', 'sibling'], 'type', 'unknown'],
         pathGroups: [
