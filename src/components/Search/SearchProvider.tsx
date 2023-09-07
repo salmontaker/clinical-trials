@@ -9,6 +9,7 @@ import * as S from './SearchProvider.styled'
 const DEBOUNCE_DELAY_MS = 500
 
 function SearchProvider({ children }: PropsWithChildren) {
+  const [isFocused, setIsFocused] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedIdx, setSelectedIdx] = useState(-1)
 
@@ -20,7 +21,9 @@ function SearchProvider({ children }: PropsWithChildren) {
   }, [suggestions])
 
   return (
-    <SearchContext.Provider value={{ query, setQuery, suggestions, selectedIdx, setSelectedIdx }}>
+    <SearchContext.Provider
+      value={{ isFocused, setIsFocused, query, setQuery, suggestions, selectedIdx, setSelectedIdx }}
+    >
       {children}
     </SearchContext.Provider>
   )
@@ -33,7 +36,7 @@ const KEY_ARROW_DOWN = 'ArrowDown'
 const KEY_ENTER = 'Enter'
 
 function SearchBox() {
-  const { setQuery, suggestions, selectedIdx, setSelectedIdx } = useSearchContext()
+  const { setIsFocused, setQuery, suggestions, selectedIdx, setSelectedIdx } = useSearchContext()
 
   const changeFocus = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!e.nativeEvent.isComposing && suggestions.length > 0) {
@@ -53,42 +56,51 @@ function SearchBox() {
     }
   }
 
-  return <S.Input onChange={(e) => setQuery(e.target.value)} onKeyDown={changeFocus} />
+  return (
+    <S.Input
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      onChange={(e) => setQuery(e.target.value)}
+      onKeyDown={changeFocus}
+      placeholder="질환명을 입력해 주세요"
+    />
+  )
 }
 
 function SearchSuggestion() {
-  const { suggestions, selectedIdx } = useSearchContext()
+  const { isFocused, query, suggestions, selectedIdx } = useSearchContext()
   const selectedElement = useRef<HTMLLIElement>(null)
 
   useEffect(() => {
     selectedElement.current?.scrollIntoView({ block: 'center' })
   }, [selectedIdx])
 
-  if (suggestions.length === 0) {
+  if (isFocused) {
     return (
       <S.SuggestionWrapper>
-        <S.SuggestionTitle>추천 검색어 없음</S.SuggestionTitle>
+        <S.SearchQuery>{query}</S.SearchQuery>
+        <S.SuggestionTitle>추천 검색어</S.SuggestionTitle>
+        {suggestions.length > 0 ? (
+          <S.Ul>
+            {suggestions.map((suggest, index) => (
+              <S.Li
+                key={suggest.sickCd}
+                ref={selectedIdx == index ? selectedElement : null}
+                selected={selectedIdx == index}
+              >
+                {suggest.sickNm}
+              </S.Li>
+            ))}
+          </S.Ul>
+        ) : (
+          <S.SuggestionEmpty>추천 검색어 없음</S.SuggestionEmpty>
+        )}
       </S.SuggestionWrapper>
     )
+  } else {
+    return <></>
   }
-
-  return (
-    <S.SuggestionWrapper>
-      <S.SuggestionTitle>추천 검색어</S.SuggestionTitle>
-      <S.Ul>
-        {suggestions.map((suggest, index) => (
-          <S.Li
-            key={suggest.sickCd}
-            ref={selectedIdx == index ? selectedElement : null}
-            selected={selectedIdx == index}
-          >
-            {suggest.sickNm}
-          </S.Li>
-        ))}
-      </S.Ul>
-    </S.SuggestionWrapper>
-  )
 }
 
-SearchProvider.Box = SearchBox
+SearchProvider.SearchBox = SearchBox
 SearchProvider.Suggestion = SearchSuggestion

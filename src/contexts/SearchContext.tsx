@@ -3,6 +3,8 @@ import { createContext, useContext } from 'react'
 import { trialDTO } from '../apis/trial'
 
 interface SearchContextType {
+  isFocused: boolean
+  setIsFocused: (isFocused: boolean) => void
   query: string
   setQuery: (query: string) => void
   suggestions: trialDTO[]

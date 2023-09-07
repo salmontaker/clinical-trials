@@ -13,6 +13,7 @@ export const Wrapper = styled.div`
 export const Title = styled.div`
   text-align: center;
   line-height: 1.5;
+  letter-spacing: -0.018em;
   font-size: ${fontSizes.large};
   font-weight: bold;
   margin-bottom: 64px;
@@ -20,23 +21,36 @@ export const Title = styled.div`
 
 export const Input = styled.input`
   width: 50%;
+  border: solid white;
   border-radius: 42px;
   background-color: white;
   font-size: ${fontSizes.medium};
-  padding: 24px;
+  padding: 20px;
+
+  &:focus {
+    border-color: #007be9;
+  }
+
+  &::placeholder {
+    color: gary;
+  }
 `
 
 export const SuggestionWrapper = styled.div`
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  position: relative;
   margin-top: 24px;
   background-color: white;
   width: 50%;
   max-height: 50%;
-  border-radius: 42px;
+  border-radius: 24px;
   padding: 24px;
-  overflow-y: auto;
+`
+
+export const SearchQuery = styled.div`
+  margin-bottom: 16px;
+  &:empty {
+    margin: 0;
+  }
 `
 
 export const SuggestionTitle = styled.div`
@@ -45,8 +59,14 @@ export const SuggestionTitle = styled.div`
   color: gray;
 `
 
-export const Ul = styled.ul`
+export const SuggestionEmpty = styled.div`
   margin-top: 12px;
+`
+
+export const Ul = styled.ul`
+  max-height: 90%;
+  margin-top: 12px;
+  overflow-y: auto;
 `
 
 export const Li = styled.li<{ selected: boolean }>`

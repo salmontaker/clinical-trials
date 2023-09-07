@@ -11,7 +11,7 @@ function SearchPage() {
         온라인으로 참여하기
       </S.Title>
       <SearchProvider>
-        <SearchProvider.Box />
+        <SearchProvider.SearchBox />
         <SearchProvider.Suggestion />
       </SearchProvider>
     </S.Wrapper>
