@@ -1,4 +1,7 @@
 import { Instance } from './Instance'
+import CacheRepository from '../store/CacheRepository'
+
+const cacheRepository = new CacheRepository<trialDTO>()
 
 export interface trialDTO {
   sickCd: string
@@ -6,8 +9,16 @@ export interface trialDTO {
 }
 
 export const getTrialsRequest = async (query: string) => {
-  const { data } = await Instance.get<trialDTO[]>(`/sick?q=${query}`)
-  console.info('calling api')
+  const cache = cacheRepository.get(query)
 
-  return data
+  if (cache && cache.expireTime > Date.now()) {
+    return cache.data
+  } else {
+    const { data } = await Instance.get<trialDTO[]>(`/sick?q=${query}`)
+    cacheRepository.set(query, data)
+
+    console.info('calling api')
+
+    return data
+  }
 }

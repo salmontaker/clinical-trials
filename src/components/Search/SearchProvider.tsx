@@ -13,7 +13,11 @@ function SearchProvider({ children }: PropsWithChildren) {
   const [selectedIdx, setSelectedIdx] = useState(-1)
 
   const debouncedQuery = useDebounce(query, DEBOUNCE_DELAY_MS)
-  const suggestions = useSuggestion(debouncedQuery, setSelectedIdx)
+  const suggestions = useSuggestion(debouncedQuery)
+
+  useEffect(() => {
+    setSelectedIdx(-1)
+  }, [suggestions])
 
   return (
     <SearchContext.Provider value={{ query, setQuery, suggestions, selectedIdx, setSelectedIdx }}>

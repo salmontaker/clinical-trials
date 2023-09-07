@@ -2,36 +2,21 @@ import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 
 import { getTrialsRequest, trialDTO } from '../apis/trial'
-import CacheRepository from '../store/CacheRepository'
 
-const cacheRepository = new CacheRepository<trialDTO>()
-
-const useSuggestion = (query: string, setIdx: (idx: number) => void) => {
+const useSuggestion = (query: string) => {
   const [suggestions, setSuggestions] = useState<trialDTO[]>([])
 
   useEffect(() => {
-    const setData = (data: trialDTO[]) => {
-      setSuggestions(data)
-      setIdx(-1)
-    }
-
-    if (!query) {
-      setData([])
+    if (query) {
+      getTrialsRequest(query)
+        .then((data) => {
+          setSuggestions(data)
+        })
+        .catch((e: AxiosError) => {
+          alert(e.message)
+        })
     } else {
-      const cache = cacheRepository.get(query)
-
-      if (cache && cache.expireTime > Date.now()) {
-        setData(cache.data)
-      } else {
-        getTrialsRequest(query)
-          .then((data) => {
-            setData(data)
-            cacheRepository.set(query, data)
-          })
-          .catch((e: AxiosError) => {
-            alert(e.message)
-          })
-      }
+      setSuggestions([])
     }
   }, [query])
 
