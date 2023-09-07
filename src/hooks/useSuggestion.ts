@@ -2,47 +2,37 @@ import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 
 import { getTrialsRequest, trialDTO } from '../apis/trial'
-import { EXPIRE_TIME } from '../contexts/SearchContext'
+import CacheRepository from '../store/CacheRepository'
 
-interface SuggestionCache {
-  value: trialDTO[]
-  expireTime: number
-}
+const cacheRepository = new CacheRepository<trialDTO>()
 
 const useSuggestion = (query: string, setIdx: (idx: number) => void) => {
   const [suggestions, setSuggestions] = useState<trialDTO[]>([])
-  const [cache, setCache] = useState<Record<string, SuggestionCache>>({})
 
   useEffect(() => {
-    const NOW = Date.now()
+    const setData = (data: trialDTO[]) => {
+      setSuggestions(data)
+      setIdx(-1)
+    }
 
     if (!query) {
-      setSuggestions([])
-      setIdx(-1)
-      return
-    }
+      setData([])
+    } else {
+      const cache = cacheRepository.get(query)
 
-    if (cache[query] && cache[query].expireTime > NOW) {
-      setSuggestions(cache[query].value)
-      setIdx(-1)
-      return
+      if (cache && cache.expireTime > Date.now()) {
+        setData(cache.data)
+      } else {
+        getTrialsRequest(query)
+          .then((data) => {
+            setData(data)
+            cacheRepository.set(query, data)
+          })
+          .catch((e: AxiosError) => {
+            alert(e.message)
+          })
+      }
     }
-
-    getTrialsRequest(query)
-      .then((data) => {
-        setSuggestions(data)
-        setCache((prev) => ({
-          ...prev,
-          [query]: {
-            value: data,
-            expireTime: NOW + EXPIRE_TIME,
-          },
-        }))
-        setIdx(-1)
-      })
-      .catch((e: AxiosError) => {
-        alert(e.message)
-      })
   }, [query])
 
   return suggestions
