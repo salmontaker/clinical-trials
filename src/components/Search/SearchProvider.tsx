@@ -1,7 +1,7 @@
 import { useState, useEffect, PropsWithChildren, useRef } from 'react'
 
-import { DEBOUNCE_DELAY_MS, SearchContext, useSearchContext } from '../../contexts/SearchContext'
-import useDebounce from '../../hooks/useDebounce'
+import { SearchContext, useSearchContext } from '../../contexts/SearchContext'
+import useDebounce, { DEBOUNCE_DELAY_MS } from '../../hooks/useDebounce'
 import useSuggestion from '../../hooks/useSuggestion'
 
 import * as S from './SearchProvider.styled'

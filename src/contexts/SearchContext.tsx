@@ -19,7 +19,3 @@ export const useSearchContext = () => {
   }
   return context
 }
-
-export const DEBOUNCE_DELAY_MS = 250
-export const MINUTE_IN_MILLISECONDS = 60000
-export const EXPIRE_TIME = MINUTE_IN_MILLISECONDS * 1
