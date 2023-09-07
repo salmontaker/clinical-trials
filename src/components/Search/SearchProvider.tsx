@@ -30,18 +30,20 @@ function SearchBox() {
   const { setQuery, suggestions, selectedIdx, setSelectedIdx } = useSearchContext()
 
   const changeFocus = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const startIdx = 0
-    const endIdx = suggestions.length - 1
+    if (!e.nativeEvent.isComposing && suggestions.length > 0) {
+      const startIdx = 0
+      const endIdx = suggestions.length - 1
 
-    if (e.key === KEY_ARROW_UP) {
-      e.preventDefault()
-      setSelectedIdx(selectedIdx > startIdx ? selectedIdx - 1 : endIdx)
-    } else if (e.key === KEY_ARROW_DOWN) {
-      e.preventDefault()
-      setSelectedIdx(selectedIdx < endIdx ? selectedIdx + 1 : startIdx)
-    } else if (e.key === KEY_ENTER) {
-      e.currentTarget.value = suggestions[selectedIdx].sickNm
-      setQuery(suggestions[selectedIdx].sickNm)
+      if (e.key === KEY_ARROW_UP) {
+        e.preventDefault()
+        setSelectedIdx(selectedIdx > startIdx ? selectedIdx - 1 : endIdx)
+      } else if (e.key === KEY_ARROW_DOWN) {
+        e.preventDefault()
+        setSelectedIdx(selectedIdx < endIdx ? selectedIdx + 1 : startIdx)
+      } else if (e.key === KEY_ENTER) {
+        e.currentTarget.value = suggestions[selectedIdx].sickNm
+        setQuery(suggestions[selectedIdx].sickNm)
+      }
     }
   }
 
