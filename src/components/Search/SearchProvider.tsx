@@ -1,10 +1,12 @@
 import { useState, useEffect, PropsWithChildren, useRef } from 'react'
 
 import { SearchContext, useSearchContext } from '../../contexts/SearchContext'
-import useDebounce, { DEBOUNCE_DELAY_MS } from '../../hooks/useDebounce'
+import useDebounce from '../../hooks/useDebounce'
 import useSuggestion from '../../hooks/useSuggestion'
 
 import * as S from './SearchProvider.styled'
+
+const DEBOUNCE_DELAY_MS = 500
 
 function SearchProvider({ children }: PropsWithChildren) {
   const [query, setQuery] = useState('')
