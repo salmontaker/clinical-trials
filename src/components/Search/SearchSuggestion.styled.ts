@@ -1,40 +1,6 @@
-import { styled } from 'styled-components'
+import styled from 'styled-components'
 
-import { flex } from '../../styles/constants/flex'
 import { fontSizes } from '../../styles/constants/fontSize'
-
-export const Wrapper = styled.div`
-  ${flex.flexColumnCenter}
-  height: 100vh;
-  background-color: #cae9ff;
-  overflow: hidden;
-`
-
-export const Title = styled.div`
-  text-align: center;
-  line-height: 1.5;
-  letter-spacing: -0.018em;
-  font-size: ${fontSizes.large};
-  font-weight: bold;
-  margin-bottom: 64px;
-`
-
-export const Input = styled.input`
-  width: 50%;
-  border: solid white;
-  border-radius: 42px;
-  background-color: white;
-  font-size: ${fontSizes.medium};
-  padding: 20px;
-
-  &:focus {
-    border-color: #007be9;
-  }
-
-  &::placeholder {
-    color: gary;
-  }
-`
 
 export const SuggestionWrapper = styled.div`
   position: relative;

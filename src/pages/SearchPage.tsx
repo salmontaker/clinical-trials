@@ -1,6 +1,6 @@
-import SearchProvider from '../components/Search/SearchProvider'
+import Search from '../components/Search/Search'
 
-import * as S from '../components/Search/SearchProvider.styled'
+import * as S from '../components/Search/Search.styled'
 
 function SearchPage() {
   return (
@@ -10,10 +10,10 @@ function SearchPage() {
         <br />
         온라인으로 참여하기
       </S.Title>
-      <SearchProvider>
-        <SearchProvider.SearchBox />
-        <SearchProvider.Suggestion />
-      </SearchProvider>
+      <Search>
+        <Search.Form />
+        <Search.Suggestion />
+      </Search>
     </S.Wrapper>
   )
 }
