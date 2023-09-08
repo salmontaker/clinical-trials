@@ -17,8 +17,6 @@ export const getTrialsRequest = async (query: string) => {
     const { data } = await Instance.get<trialDTO[]>(`/sick?q=${query}`)
     cacheRepository.set(query, data)
 
-    console.info('calling api')
-
     return data
   }
 }
