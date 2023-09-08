@@ -9,7 +9,8 @@ interface SearchContextType {
   setQuery: (query: string) => void
   suggestions: trialDTO[]
   selectedIdx: number
-  setSelectedIdx: (idx: number) => void
+  selectIndexByKeyDown: (e: React.KeyboardEvent) => void
+  selectedItem: trialDTO | null
 }
 
 export const SearchContext = createContext<SearchContextType | null>(null)
