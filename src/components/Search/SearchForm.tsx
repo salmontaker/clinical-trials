@@ -12,14 +12,20 @@ function SearchForm() {
   }, [selectedItem])
 
   return (
-    <S.Input
-      placeholder="질환명을 입력해 주세요"
-      value={selectedItem?.sickNm}
+    <S.SearchForm
       onBlur={() => setIsFocused(false)}
-      onChange={(e) => setQuery(e.target.value)}
       onFocus={() => setIsFocused(true)}
       onKeyDown={(e) => selectIndexByKeyDown(e)}
-    />
+    >
+      <S.SearchInput
+        placeholder="질환명을 입력해 주세요"
+        value={selectedItem?.sickNm}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      <S.SearchButton>
+        <S.SearchIcon />
+      </S.SearchButton>
+    </S.SearchForm>
   )
 }
 

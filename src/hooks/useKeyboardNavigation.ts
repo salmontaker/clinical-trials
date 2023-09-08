@@ -20,6 +20,7 @@ const useKeyboardNavigation = <T>(items: T[]) => {
         e.preventDefault()
         setSelectedIdx(selectedIdx < endIdx ? selectedIdx + 1 : startIdx)
       } else if (e.key === KEY_ENTER) {
+        e.preventDefault()
         setSelectedItem(items[selectedIdx])
       }
     }
