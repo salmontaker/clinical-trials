@@ -5,7 +5,7 @@ import { useSearchContext } from '../../contexts/SearchContext'
 import * as S from './SearchSuggestion.styled'
 
 function SearchSuggestion() {
-  const { isFocused, query, suggestions, selectedIdx } = useSearchContext()
+  const { isFocused, query, suggestions, isLoading, selectedIdx } = useSearchContext()
   const selectedElement = useRef<HTMLLIElement>(null)
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function SearchSuggestion() {
             ))}
           </S.Ul>
         ) : (
-          <S.SuggestionEmpty>추천 검색어 없음</S.SuggestionEmpty>
+          <S.SuggestionEmpty>{isLoading ? '불러오는중' : '추천 검색어 없음'}</S.SuggestionEmpty>
         )}
       </S.SuggestionWrapper>
     )

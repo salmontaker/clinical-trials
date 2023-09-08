@@ -15,7 +15,7 @@ function Search({ children }: PropsWithChildren) {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, DEBOUNCE_DELAY_MS)
 
-  const suggestions = useSuggestion(debouncedQuery)
+  const { suggestions, isLoading } = useSuggestion(debouncedQuery)
   const { selectedIdx, selectIndexByKeyDown, selectedItem } = useKeyboardNavigation(suggestions)
 
   return (
@@ -26,6 +26,7 @@ function Search({ children }: PropsWithChildren) {
         query,
         setQuery,
         suggestions,
+        isLoading,
         selectedIdx,
         selectIndexByKeyDown,
         selectedItem,

@@ -8,6 +8,7 @@ interface SearchContextType {
   query: string
   setQuery: (query: string) => void
   suggestions: trialDTO[]
+  isLoading: boolean
   selectedIdx: number
   selectIndexByKeyDown: (e: React.KeyboardEvent) => void
   selectedItem: trialDTO | null

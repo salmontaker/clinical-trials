@@ -5,9 +5,11 @@ import { getTrialsRequest, trialDTO } from '../apis/trial'
 
 const useSuggestion = (query: string) => {
   const [suggestions, setSuggestions] = useState<trialDTO[]>([])
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (query) {
+      setIsLoading(true)
       getTrialsRequest(query)
         .then((data) => {
           setSuggestions(data)
@@ -15,12 +17,13 @@ const useSuggestion = (query: string) => {
         .catch((e: AxiosError) => {
           alert(e.message)
         })
+        .finally(() => setIsLoading(false))
     } else {
       setSuggestions([])
     }
   }, [query])
 
-  return suggestions
+  return { suggestions, isLoading }
 }
 
 export default useSuggestion
