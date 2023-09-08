@@ -30,9 +30,24 @@ export const SuggestionEmpty = styled.div`
 `
 
 export const Ul = styled.ul`
-  max-height: 90%;
+  max-height: 85%;
   margin-top: 12px;
+  padding-right: 12px;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #007be9;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: aliceblue;
+    border-radius: 10px;
+  }
 `
 
 export const Li = styled.li<{ selected: boolean }>`
